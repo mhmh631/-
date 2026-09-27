@@ -1,0 +1,72 @@
+{
+  "name": "saha-international",
+  "version": "1.0.0",
+  "description": "مشروع ساحة الدولي - إدارة المستودعات والمخزون",
+  "private": true,
+  "main": "electron/main.js",
+  "scripts": {
+    "desktop": "electron .",
+    "build:win": "electron-builder --win nsis portable",
+    "prepare:www": "node scripts/prepare-www.cjs",
+    "android:add": "npm run prepare:www && cap add android",
+    "android:sync": "npm run prepare:www && cap sync android",
+    "android:open": "cap open android",
+    "android:run": "npm run prepare:www && cap run android",
+    "db:check": "node scripts/check-sqlite.cjs",
+    "prepare:desktop": "npm install",
+    "prepare:android": "npm run prepare:www && npx cap sync android",
+    "build:android:debug": "npm run prepare:www && npx cap sync android && cd android && gradlew.bat assembleDebug",
+    "build:android:release": "npm run prepare:www && npx cap sync android && cd android && gradlew.bat assembleRelease",
+    "ai:gateway": "node ai-gateway.cjs"
+  },
+  "dependencies": {
+    "@capacitor-community/sqlite": "^8.1.1",
+    "@capacitor/android": "^8.0.0",
+    "@capacitor/core": "^8.0.0",
+    "better-sqlite3": "^12.4.1"
+  },
+  "devDependencies": {
+    "@capacitor/cli": "^8.0.0",
+    "electron": "^38.0.0",
+    "electron-builder": "^26.0.0",
+    "typescript": "^7.0.2"
+  },
+  "build": {
+    "appId": "com.saha.international",
+    "productName": "مشروع ساحة الدولي",
+    "directories": {
+      "output": "dist"
+    },
+    "files": [
+      "index.html",
+      "assets/**/*",
+      "electron/**/*",
+      "database/**/*",
+      "package.json",
+      "ai-gateway.cjs",
+      "node_modules/**/*"
+    ],
+    "asarUnpack": [
+      "node_modules/better-sqlite3/**/*"
+    ],
+    "win": {
+      "target": [
+        "nsis",
+        "portable"
+      ],
+      "artifactName": "Saha-International-${version}-${arch}.${ext}"
+    },
+    "nsis": {
+      "oneClick": false,
+      "allowToChangeInstallationDirectory": true,
+      "createDesktopShortcut": true,
+      "createStartMenuShortcut": true
+    },
+    "portable": {
+      "artifactName": "Saha-International-${version}-${arch}-Portable.${ext}"
+    }
+  },
+  "allowScripts": {
+    "electron@38.8.6": true
+  }
+}
